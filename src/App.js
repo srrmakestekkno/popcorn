@@ -76,21 +76,21 @@ const Search = () => {
 };
 
 /* presentational component */
-const NumResults = () => {
+const NumResults = ({ movies }) => {
   return (
     <p className="num-results">
-      Found <strong>X</strong> results
+      Found <strong>{movies.length}</strong> results
     </p>
   );
 };
 
 /* structural component */
-const NavBar = () => {
+const NavBar = ({ movies }) => {
   return (
     <nav className="nav-bar">
       <Logo />
       <Search />
-      <NumResults />
+      <NumResults movies={movies} />
     </nav>
   );
 };
@@ -243,7 +243,7 @@ const App = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar movies={movies} />
       <Main movies={movies} />
     </>
   );
