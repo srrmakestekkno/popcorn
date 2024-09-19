@@ -66,9 +66,24 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
 
       // Because of closure, the title will be remebered because the title value existed
       // when this callback was created.
-      console.log(`Clean up effect for movie ${title}`);
+      // console.log(`Clean up effect for movie ${title}`);
     };
   }, [title]);
+
+  useEffect(() => {
+    const callback = (e) => {
+      if (e.code === "Escape") {
+        onCloseMovie();
+      }
+    };
+
+    document.addEventListener("keydown", callback);
+
+    return () => {
+      // this runs when the movie details unmounts
+      document.addEventListener("keydown", callback);
+    };
+  }, [onCloseMovie]);
 
   return (
     <div className="details">

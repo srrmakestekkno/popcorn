@@ -59,37 +59,14 @@ const tempWatchedData = [
   },
 ];
 
-/* stateful component */
-// const WatchedBox = () => {
-//   const [watched, setWatched] = useState(tempWatchedData);
-//   const [isOpen2, setIsOpen2] = useState(true);
-
-//   return (
-//     <div className="box">
-//       <button
-//         className="btn-toggle"
-//         onClick={() => setIsOpen2((open) => !open)}
-//       >
-//         {isOpen2 ? "–" : "+"}
-//       </button>
-//       {isOpen2 && (
-//         <>
-//           <WatchedSummary watched={watched} />
-//           <WatchedMoviesList watched={watched} />
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
 const key = "fd36d2ef";
 
 const App = () => {
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
   // useEffect(() => {
@@ -122,6 +99,7 @@ const App = () => {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   };
 
+  // could be a normal event handler
   useEffect(() => {
     const controller = new AbortController(); // browser API
 
@@ -144,14 +122,10 @@ const App = () => {
           throw new Error("Movie not found...");
         }
 
-        // if (!data.Search) {
-        //   throw new Error("Search is undefined...");
-        // }
-        console.log(data.Search);
         setMovies(data.Search);
         setError("");
       } catch (err) {
-        console.error(err.message);
+        // console.error(err.message);
         if (err.name !== "AbortError") {
           setError(err.message);
         }
@@ -165,6 +139,8 @@ const App = () => {
       setError("");
       return;
     }
+
+    handleCloseMovie();
     fetchMovies();
 
     return () => {
