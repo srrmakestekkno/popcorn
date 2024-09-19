@@ -3,7 +3,7 @@ import WatchedMovie from "./WatchedMovie";
 /* presentational component */
 const WatchedMoviesList = ({ watched, onDeleteWatched }) => {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {watched.map((movie) => (
         <WatchedMovie
           key={movie.imdbID}
