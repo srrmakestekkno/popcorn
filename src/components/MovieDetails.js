@@ -57,7 +57,17 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
 
   useEffect(() => {
     if (!title) return;
+
     document.title = `Movie | ${title}`;
+
+    // when this component is unmounted
+    return () => {
+      document.title = "usePopcorn";
+
+      // Because of closure, the title will be remebered because the title value existed
+      // when this callback was created.
+      console.log(`Clean up effect for movie ${title}`);
+    };
   }, [title]);
 
   return (

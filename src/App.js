@@ -123,32 +123,38 @@ const App = () => {
   };
 
   useEffect(() => {
+    const controller = new AbortController(); // browser API
+
     const fetchMovies = async () => {
       try {
         setIsLoading(true);
         setError("");
 
         const res = await fetch(
-          `https://www.omdbapi.com/?i=tt3896198&apikey=${key}&s=${query}`
+          `https://www.omdbapi.com/?i=tt3896198&apikey=${key}&s=${query}`,
+          { signal: controller.signal }
         );
 
         if (!res.ok) {
-          throw new Error("Something went wrong....");
+          throw new Error("Something went wrong with fetching movies...");
         }
 
         const data = await res.json();
         if (data.Response === "False") {
-          throw new Error("Movie not found");
+          throw new Error("Movie not found...");
         }
 
-        if (!data.Search) {
-          throw new Error("Movie not found");
-        }
+        // if (!data.Search) {
+        //   throw new Error("Search is undefined...");
+        // }
         console.log(data.Search);
         setMovies(data.Search);
+        setError("");
       } catch (err) {
         console.error(err.message);
-        setError(err.message);
+        if (err.name !== "AbortError") {
+          setError(err.message);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -160,6 +166,12 @@ const App = () => {
       return;
     }
     fetchMovies();
+
+    return () => {
+      // For each new key stroke, the controller will abort the previous request.
+      // Cancel current request when a new one comes in.
+      controller.abort();
+    };
   }, [query]);
 
   return (
