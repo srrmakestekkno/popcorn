@@ -180,6 +180,7 @@ const App = () => {
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
               onAddWatched={handleAddWatched}
+              watched={watched}
             />
           ) : (
             <>
