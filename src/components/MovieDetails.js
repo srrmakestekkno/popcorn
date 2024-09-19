@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import StarRating from "./StarRating";
 import Loader from "./Loader";
-// import { key } from "../utils.js";
 
 const key = "fd36d2ef";
 
-const MovieDetails = ({ selectedId, onCloseMovie }) => {
+const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched }) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState("");
 
   const {
     Title: title,
@@ -21,6 +21,20 @@ const MovieDetails = ({ selectedId, onCloseMovie }) => {
     Director: director,
     Genre: genre,
   } = movie;
+
+  const handleAdd = () => {
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(" ").at(0)),
+      userRating,
+    };
+    onAddWatched(newWatchedMovie);
+    onCloseMovie();
+  };
 
   useEffect(() => {
     const getMovieDetails = async () => {
@@ -61,7 +75,16 @@ const MovieDetails = ({ selectedId, onCloseMovie }) => {
           </header>
           <section>
             <div className="rating">
-              <StarRating maxRating={10} size={24} />
+              <StarRating
+                maxRating={10}
+                size={24}
+                onSetRating={setUserRating}
+              />
+              {userRating > 0 && (
+                <button className="btn-add" onClick={handleAdd}>
+                  Add to list
+                </button>
+              )}
             </div>
             <p>
               <em>{plot}</em>

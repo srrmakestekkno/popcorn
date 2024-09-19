@@ -1,8 +1,5 @@
-//import { average } from "../utils.js";
-
-function average(arr) {
+const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
-}
 
 /* presentational component */
 const WatchedSummary = ({ watched }) => {
@@ -20,11 +17,11 @@ const WatchedSummary = ({ watched }) => {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p>
           <span>⏳</span>

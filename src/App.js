@@ -114,7 +114,7 @@ const App = () => {
     setSelectedId(null);
   };
 
-  const handleAddWatchedMovie = (movie) => {
+  const handleAddWatched = (movie) => {
     setWatched((watched) => [...watched, movie]);
   };
 
@@ -179,6 +179,7 @@ const App = () => {
             <MovieDetails
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
+              onAddWatched={handleAddWatched}
             />
           ) : (
             <>
