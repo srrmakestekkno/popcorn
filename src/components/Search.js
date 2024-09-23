@@ -1,18 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { useKey } from "../useKey";
 
 /* stateful component */
 const Search = ({ query, setQuery }) => {
   const inputEl = useRef(null);
   // ref will be added to the DOM element after the DOM has loaded
   // therefor useEffect should be used, since it runs after the DOM has been loaded
-  useEffect(() => {
-    // equal to the commented out code below this
+
+  useKey("Enter", () => {
+    if (document.activeElement === inputEl.current) return;
+
     inputEl.current.focus();
+    setQuery("");
   });
-  // useEffect(() => {
-  //   const el = document.querySelector(".search");
-  //   el.focus();
-  // }, []);
+
   return (
     <input
       className="search"

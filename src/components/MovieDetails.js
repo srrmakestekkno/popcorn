@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import StarRating from "./StarRating";
 import Loader from "./Loader";
+
+// custom hooks
+import { useKey } from "../useKey";
 
 const key = "fd36d2ef";
 
@@ -8,6 +11,8 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
+
+  const countRef = useRef(0);
 
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
   const watchedUserRating = watched.find(
@@ -37,10 +42,19 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
+      countRatingDecisions: countRef.current,
     };
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   };
+
+  useKey("Escape", onCloseMovie);
+
+  useEffect(() => {
+    if (userRating) {
+      countRef.current = countRef.current + 1;
+    }
+  }, [userRating]);
 
   useEffect(() => {
     const getMovieDetails = async () => {
@@ -71,20 +85,20 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     };
   }, [title]);
 
-  useEffect(() => {
-    const callback = (e) => {
-      if (e.code === "Escape") {
-        onCloseMovie();
-      }
-    };
+  // useEffect(() => {
+  //   const callback = (e) => {
+  //     if (e.code === "Escape") {
+  //       onCloseMovie();
+  //     }
+  //   };
 
-    document.addEventListener("keydown", callback);
+  //   document.addEventListener("keydown", callback);
 
-    return () => {
-      // this runs when the movie details unmounts
-      document.addEventListener("keydown", callback);
-    };
-  }, [onCloseMovie]);
+  //   return () => {
+  //     // this runs when the movie details unmounts
+  //     document.addEventListener("keydown", callback);
+  //   };
+  // }, [onCloseMovie]);
 
   return (
     <div className="details">
