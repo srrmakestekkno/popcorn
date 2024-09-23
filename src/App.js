@@ -64,10 +64,15 @@ const key = "fd36d2ef";
 const App = () => {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  // const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [watched, setWatched] = useState(() => {
+    const key = "watched";
+    const storedValue = localStorage.getItem(key);
+    return JSON.parse(storedValue); // convert back from string
+  });
 
   // useEffect(() => {
   //   console.log("After initial render");
@@ -93,11 +98,18 @@ const App = () => {
 
   const handleAddWatched = (movie) => {
     setWatched((watched) => [...watched, movie]);
+
+    //localStorage.setItem("watched", JSON.stringify([...watched, movie]));
   };
 
   const handleDeleteWatched = (id) => {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   };
+
+  // this runs when movies in the watched list is removed or movies are added to the list
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify(watched));
+  }, [watched]);
 
   // could be a normal event handler
   useEffect(() => {

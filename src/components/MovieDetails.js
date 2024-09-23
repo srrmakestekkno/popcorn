@@ -14,6 +14,7 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     (movie) => movie.imdbID === selectedId
   )?.userRating;
 
+  // deconstruction. Ex. take the Title from movie and assign the value to title...
   const {
     Title: title,
     Year: year,
